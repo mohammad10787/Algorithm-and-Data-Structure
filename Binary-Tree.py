@@ -87,6 +87,51 @@ class BinarySearchTreeNode:
         right_sum = self.right.calculate_sum() if self.right else 0
         return self.data + left_sum + right_sum
 
+# removes the min value from the right branch to replace the delted item
+    def delete_min(self, val):
+        print(self.data)
+        if val < self.data:
+            if self.left:
+                self.left = self.left.delete_min(val)
+        elif val > self.data:
+            if self.right:
+                self.right = self.right.delete_min(val)
+        else:
+            if self.left is None and self.right is None:
+                return None
+            if self.left is None:
+                return self.right
+            if self.right is None:
+                return self.left
+
+            min_val = self.right.find_min()
+            self.data = min_val
+            self.right = self.right.delete_min(min_val)
+
+        return self
+    # uses the max value from the left branch to replace the deleted item
+    def delete_max(self, val):
+        print(self.data)
+        if val < self.data:
+            if self.left:
+                self.left = self.left.delete_max(val)
+        elif val > self.data:
+            if self.right:
+                self.right = self.right.delete_max(val)
+        else:
+            if self.left is None and self.right is None:
+                return None
+            if self.left is None:
+                return self.right
+            if self.right is None:
+                return self.left
+
+            max_val = self.left.find_max()
+            self.data = max_val
+            self.left = self.left.delete(max_val)
+
+        return self
+
 
 
 def build_tree(elements):
@@ -123,3 +168,7 @@ if __name__ == '__main__':
     print("Min:", numbers_tree.find_min())
     print("Max:", numbers_tree.find_max())
     print("Sum:", numbers_tree.calculate_sum())
+    numbers_tree.delete_min(17)
+    print(numbers_tree.in_order_traversal())
+    numbers_tree.delete_max(17)
+    print(numbers_tree.in_order_traversal())
